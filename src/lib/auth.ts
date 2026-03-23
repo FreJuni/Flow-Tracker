@@ -3,6 +3,7 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import pg from "pg";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
+import { nextCookies } from "better-auth/next-js";
 
 const connectionString = process.env.DATABASE_URL;
 const pool = new pg.Pool({ connectionString });
@@ -13,13 +14,16 @@ export const auth = betterAuth({
     emailAndPassword: {
         enabled: true,
     },
-    // socialProviders: {
-    //     github: {
-    //         clientId: process.env.GITHUB_CLIENT_ID as string,
-    //         clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
-    //     },
-    // },
+    socialProviders: {
+        google: {
+            clientId: process.env.GOOGLE_CLIENT_ID as string,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+        },
+    },
     database: prismaAdapter(prisma, {
         provider: "postgresql",
     }),
+    plugins: [
+        nextCookies()
+    ]
 });
