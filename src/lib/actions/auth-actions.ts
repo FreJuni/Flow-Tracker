@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 
 export async function signUp(name: string, email: string, password: string) {
     const result = await auth.api.signUpEmail({
+        headers: await headers(),
         body: {
             email,
             password,
@@ -20,6 +21,7 @@ export async function signUp(name: string, email: string, password: string) {
 
 export async function signIn(email: string, password: string) {
     const result = await auth.api.signInEmail({
+        headers: await headers(),
         body: {
             email,
             password,

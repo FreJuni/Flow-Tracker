@@ -1,16 +1,23 @@
-import { PrismaClient } from "@prisma/client";
-import { PrismaPg } from "@prisma/adapter-pg";
-import pg from "pg";
+
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
+import { customSession } from "better-auth/plugins";
+import { db } from "@/src/server/db";
 
-const connectionString = process.env.DATABASE_URL;
-const pool = new pg.Pool({ connectionString });
-const adapter = new PrismaPg(pool as any);
-const prisma = new PrismaClient({ adapter });
+async function findUser(userId: string) {
+    return await db.user.findUnique({
+        where: {
+            id: userId,
+        },
+    });
+}
 
 export const auth = betterAuth({
+    database: prismaAdapter(db, {
+        provider: "postgresql",
+        usePlural: false,
+    }),
     emailAndPassword: {
         enabled: true,
     },
@@ -19,11 +26,41 @@ export const auth = betterAuth({
             clientId: process.env.GOOGLE_CLIENT_ID as string,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
         },
+        // facebook: {
+        //     clientId: process.env.FACEBOOK_CLIENT_ID as string,
+        //     clientSecret: process.env.FACEBOOK_CLIENT_SECRET as string,
+        //     scopes: ["email", "public_profile"],
+        // },
     },
-    database: prismaAdapter(prisma, {
-        provider: "postgresql",
-    }),
+    session: {
+        cookieCache: { enabled: true }
+    },
+    databaseHooks: {
+        user: {
+            create: {
+                async before(user) {
+                    const $user = { ...user } as any
+                    return {
+                        data: {
+                            ...$user,
+                            role: 'USER'
+                        }
+                    }
+                }
+            }
+        }
+    },
     plugins: [
-        nextCookies()
+        customSession(async ({ session }) => {
+            const userData = await findUser(session.userId);
+            console.log("userData", userData);
+
+            return {
+                role: userData?.role,
+                user: userData,
+                session,
+            }
+        }),
+        nextCookies(),
     ]
 });
