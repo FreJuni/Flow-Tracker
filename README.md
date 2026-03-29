@@ -1,21 +1,78 @@
-# Next.js template
+# Flow-Tracker
 
-This is a Next.js template with shadcn/ui.
+Flow-Tracker is a comprehensive modern web application designed for managing inventory, order flow, and warehouse operations. Built with a robust full-stack architecture, it streamlines complex workflows like stock picking, truck allocation, and dynamic pricing management.
 
-## Adding components
+## Core Features
 
-To add components to your app, run the following command:
+- **Sales Order Management**: End-to-end tracking and processing of sales orders.
+- **Advanced Stock Picking**: 
+  - Optimized warehouse picking paths for maximized efficiency.
+  - Automated PDF generation for picking lists with professional typography and layouts.
+  - Visual status indicators tracking printed and processed orders.
+- **Truck Allocation**: Intelligent delivery tracking and scheduling with date-based filtering.
+- **Dynamic Pricing Engine**: Granular secondary pricing module and Restock Calculator enabling precise price modifications based on groups, articles, and specific clients.
+- **Invoice Queue**: Streamlined invoice processing and management system.
+- **Secure Authentication**: Robust role-based access control.
 
-```bash
-npx shadcn@latest add button
-```
+## Tech Stack
 
-This will place the ui components in the `components` directory.
+This project is built using modern, type-safe web technologies:
 
-## Using components
+- **Framework**: [Next.js](https://nextjs.org/) (App Router)
+- **Database & ORM**: [Prisma](https://www.prisma.io/) with PostgreSQL
+- **API Engine**: [tRPC](https://trpc.io/) for end-to-end typesafe APIs
+- **State Management**: [TanStack Query](https://tanstack.com/query/latest) (React Query)
+- **Authentication**: [Better Auth](https://better-auth.com/)
+- **Styling & Components**: [Tailwind CSS](https://tailwindcss.com/) & [shadcn/ui](https://ui.shadcn.com/)
 
-To use the components in your app, import them as follows:
+## Getting Started
 
-```tsx
-import { Button } from "@/components/ui/button";
-```
+### Prerequisites
+
+- Node.js (v18 or higher)
+- Yarn, npm, or pnpm
+- A running PostgreSQL database instance
+
+### Installation & Setup
+
+1. **Clone the repository:**
+   ```bash
+   git clone <repository-url>
+   cd flowtrack
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   yarn install
+   ```
+
+3. **Set up environment variables:**
+   Create a `.env` file in the root directory and configure your credentials:
+   ```env
+   DATABASE_URL="postgresql://user:password@localhost:5432/flowtrack"
+   BETTER_AUTH_SECRET="your-secret-key-here"
+   ```
+
+4. **Initialize the database:**
+   Run Prisma migrations to build the database schema.
+   ```bash
+   npx prisma migrate dev
+   ```
+
+5. **Start the development server:**
+   ```bash
+   yarn dev
+   ```
+
+The application will be available at `http://localhost:3000`.
+
+## Architecture & Code Quality
+
+The repository adopts a modular architecture separating presentation components from business logic:
+- Type safety enforced uniformly from backend to frontend components via tRPC.
+- Modern React hooks and declarative data fetching abstractions.
+- Custom automated PDF layout generation for precise logistical reporting.
+
+## License
+
+This project is proprietary and confidential. All rights reserved.
