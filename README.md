@@ -3,15 +3,6 @@
 Flow-Tracker is a comprehensive modern web application designed for managing inventory, order flow, and warehouse operations. Built with a robust full-stack architecture, it streamlines complex workflows like stock picking, truck allocation, and dynamic pricing management.
 
 ## Core Features
-
-- **Sales Order Management**: End-to-end tracking and processing of sales orders.
-- **Advanced Stock Picking**: 
-  - Optimized warehouse picking paths for maximized efficiency.
-  - Automated PDF generation for picking lists with professional typography and layouts.
-  - Visual status indicators tracking printed and processed orders.
-- **Truck Allocation**: Intelligent delivery tracking and scheduling with date-based filtering.
-- **Dynamic Pricing Engine**: Granular secondary pricing module and Restock Calculator enabling precise price modifications based on groups, articles, and specific clients.
-- **Invoice Queue**: Streamlined invoice processing and management system.
 - **Secure Authentication**: Robust role-based access control.
 
 ## Tech Stack
