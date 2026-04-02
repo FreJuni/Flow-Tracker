@@ -1,6 +1,7 @@
 import { createTransactionSchema, getTransactionsSchema } from "@/src/schemas/transaction-schema";
 import { protectedProcedure } from "../../trpc";
 import { db } from "..";
+import z from "zod";
 
 export const transactionRouter = {
     getTransactions: protectedProcedure
@@ -106,5 +107,35 @@ export const transactionRouter = {
             });
 
             return updatedTransaction;
-        })
+        }),
+
+    deleteTransaction: protectedProcedure
+        .input(z.object({
+            transactionId: z.number(),
+        }))
+        .mutation(async ({ ctx: { session }, input }) => {
+            const { transactionId } = input;
+
+            if (!session?.user.id) {
+                throw new Error("Unauthorized");
+            }
+
+            const transaction = await db.transaction.findUnique({
+                where: {
+                    id: transactionId,
+                },
+            });
+
+            if (!transaction || transaction.authorId !== session.user.id) {
+                throw new Error("Unauthorized");
+            }
+
+            const deletedTransaction = await db.transaction.delete({
+                where: {
+                    id: transactionId,
+                },
+            });
+
+            return deletedTransaction;
+        }),
 }
